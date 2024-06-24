@@ -1,10 +1,9 @@
 import { Page, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Input } from "../components/Input";
-import { IGeneratedRegistrationForm } from "../lib/types/generator";
+
 import { Button } from "../components/Button";
 import { Title } from "../components/Title";
-import { allure } from "allure-playwright";
 import { Link } from "../components/Link";
 import { IUserData } from "../lib/types/user";
 
@@ -21,10 +20,9 @@ export class RegisterPage extends BasePage {
   constructor(public page: Page) {
     super(page);
 
-    this.emailInput = new Input({
-      page,
-      locator: this.page.getByTestId("register-email"),
-      name: "Email",
+    this.emailInput = new Input({page, 
+      locator: this.page.getByTestId("register-email"), 
+      name: "Email"
     });
     this.nameInput = new Input({
       page,
