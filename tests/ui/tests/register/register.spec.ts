@@ -58,6 +58,13 @@ test.describe("Negative registration scenarios with an invalid data", () => {
     }
   });
 
+  test("Submit a registration form with an icorrect Confirm Password", async({registerPage}) => {
+    const userData = invalidUserData.create()
+    const confirmPassword = '123456'
+    await registerPage.fillRegistrationForm({...userData, confirmPassword})
+    await registerPage.confirmPasswordInput.shouldHaveErrorMessage()
+  })
+
   test("Submit a registration form with empty inputs", async ({
     registerPage,
   }) => {

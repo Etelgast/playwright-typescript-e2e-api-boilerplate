@@ -44,6 +44,13 @@ export class Input extends Component {
             }
           ).toBeVisible();
         }
+        if(this.componentName === "Cofirm Password") {
+          await expect(this.page.getByText("Passwords don't match!"), 
+          {
+            message: `Error message is visible for ${this.componentName} input`,
+          }
+        ).toBeVisible()
+        }
       }
     );
   }
