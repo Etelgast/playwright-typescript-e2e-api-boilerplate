@@ -2,7 +2,7 @@ export interface IUserData {
   email: string;
   name: string;
   password: string;
-  confirmPassword?: string;
+  confirmPassword: string;
 }
 
 export interface IUserDataCondition {
@@ -13,7 +13,8 @@ export interface IUserDataCondition {
 }
 
 export interface IUserDataConditioned {
-  email: IUserDataCondition;
+  emailCondition: IUserDataCondition;
   name: IUserDataCondition;
-  password: IUserDataCondition;
+  passwordCondition: IUserDataCondition;
+  isConfirmPasswordDifferent: Boolean
 }

@@ -40,9 +40,10 @@ test.describe("Negative registration scenarios with an invalid data", () => {
 
   test.beforeEach(() => {
     invalidUserData = new InvalidUserData({
-      email: { isCorrectSchema: true },
+      emailCondition: { isCorrectSchema: true },
       name: { isCorrectSchema: true },
-      password: { isCorrectSchema: true, options: { length: 10 } },
+      passwordCondition: { isCorrectSchema: true, options: { length: 10 } },
+      isConfirmPasswordDifferent: false
     });
   });
 
@@ -52,16 +53,15 @@ test.describe("Negative registration scenarios with an invalid data", () => {
     for (const len of [1, 5]) {
       invalidUserData.updatePasswordLength(len);
       const userData = invalidUserData.create();
-      const confirmPassword = userData.password;
-      await registerPage.fillRegistrationForm({ ...userData, confirmPassword });
+      await registerPage.fillRegistrationForm(userData);
       await registerPage.passwordInput.shouldHaveErrorMessage();
     }
   });
 
   test("Submit a registration form with an icorrect Confirm Password", async({registerPage}) => {
+    invalidUserData.changeConfirmPassword()
     const userData = invalidUserData.create()
-    const confirmPassword = '123456'
-    await registerPage.fillRegistrationForm({...userData, confirmPassword})
+    await registerPage.fillRegistrationForm(userData)
     await registerPage.confirmPasswordInput.shouldHaveErrorMessage()
   })
 

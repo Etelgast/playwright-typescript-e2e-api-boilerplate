@@ -11,19 +11,26 @@ export default class InvalidUserData extends UserDataFactory {
   }
 
   create(): IUserData {
-    const { email, password, name } = this.conditions;
+    const { emailCondition, passwordCondition, isConfirmPasswordDifferent } = this.conditions;
+    const password = faker.internet.password(passwordCondition.options)
+    const confirmPassword = isConfirmPasswordDifferent ? faker.internet.password() : password
     return {
-      email: email.isCorrectSchema
+      email: emailCondition.isCorrectSchema
         ? faker.internet.email()
         : faker.internet.userAgent(),
       name: faker.internet.userName(),
-      password: faker.internet.password(password.options),
+      password,
+      confirmPassword
     };
   }
 
   updatePasswordLength(length: number) {
-    if (this.conditions.password.options) {
-      this.conditions.password.options.length = length;
+    if (this.conditions.passwordCondition.options) {
+      this.conditions.passwordCondition.options.length = length;
     }
+  }
+
+  changeConfirmPassword() {
+    this.conditions.isConfirmPasswordDifferent = !this.conditions.isConfirmPasswordDifferent
   }
 }
