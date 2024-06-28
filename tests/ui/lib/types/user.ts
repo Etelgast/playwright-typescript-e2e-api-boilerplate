@@ -18,3 +18,13 @@ export interface IUserDataConditioned {
   passwordCondition: IUserDataCondition;
   isConfirmPasswordDifferent: Boolean
 }
+
+export interface RegisteredUser {
+  email: string;
+  name: string;
+  password: string;
+};
+
+export interface AuthUser extends RegisteredUser {
+  token: string;
+}

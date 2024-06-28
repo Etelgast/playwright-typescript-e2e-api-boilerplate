@@ -6,6 +6,7 @@ import { LoginPage } from "../../pages/LoginPage";
 import { user } from "../../../api/lib/data/user";
 import { UserAPIRoutes } from "../../../api/lib/utils/APIRoutes";
 import { NotesPage } from "../../pages/NotesPage";
+import { AuthUser, RegisteredUser } from "../types/user";
 
 export type NotesPagesFixture = {
   welcomePage: WelcomePage;
@@ -13,14 +14,29 @@ export type NotesPagesFixture = {
   loginPage: LoginPage;
   notesPage: NotesPage;
   registeredUser: RegisteredUser;
+  authUser: AuthUser
   request: APIRequestContext;
 };
 
-type RegisteredUser = {
-  email: string;
-  name: string;
-  password: string;
-};
+const createUser = async({request}): Promise<RegisteredUser | never> => {
+  const { email, name, password } = user;
+  try {
+    await request.post("/notes/api" + UserAPIRoutes.Register, { data: email, name, password });
+    return {email, name, password}
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+const createAuthUser = async({request}, createdUser: RegisteredUser): Promise<string | never> => {
+  try {
+    const res = await request.post("/notes/api" + UserAPIRoutes.Login, {data: createdUser})
+    const {data} = await res.json()
+    return data.token
+  } catch (error) {
+    throw new Error(error);
+  }
+}
 
 export const notesPagesFixture: Fixtures<
   NotesPagesFixture,
@@ -43,15 +59,13 @@ export const notesPagesFixture: Fixtures<
     await use(notesPage);
   },
   registeredUser: async ({ request }, use) => {
-    const { email, name, password } = user;
-    try {
-      await request.post("/notes/api" + UserAPIRoutes.Register, {
-        data: { email, name, password },
-      });
-      const registeredUser = { email, name, password };
-      await use(registeredUser);
-    } catch (error) {
-      throw new Error(error);
-    }
+    const registeredUser = await createUser({request})
+    await use(registeredUser)
   },
+  authUser: async({request}, use) => {
+    const registeredUser = await createUser({request})
+    const token = await createAuthUser({request}, registeredUser)
+    const authUser = {...registeredUser, token}
+    await use(authUser)
+  }
 };
