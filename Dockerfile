@@ -4,7 +4,7 @@ WORKDIR /build
 
 COPY package.json ./
 
-RUN npm i && npx playwright install chromium
+RUN npm ci && npx playwright install chromium
 
 COPY . .
 
