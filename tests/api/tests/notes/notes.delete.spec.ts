@@ -21,7 +21,7 @@ test("[DELETE] Delete a note by ID", async({API, authUser}) => {
     expect(getRes.status()).toBe(404)
 })
 
-test("[DELETE] Delete a note by incorrect ID", async({API, authUser}) => {
+test("[DELETE] Delete a note by incorrect ID", {tag: ['@smoke', '@customer']}, async({API, authUser}) => {
     const note = generateNote({ min: 4, max: 15 }, { min: 4, max: 30 }, "Home");
     await createNote(API, authUser.token, note)
     const noteId = '123456'
@@ -30,7 +30,7 @@ test("[DELETE] Delete a note by incorrect ID", async({API, authUser}) => {
     expect(deleteRes.status()).toBe(400)
 })
 
-test("[DELETE] Delete a note by ID without authentication token", async({API, authUser}) => {
+test("[DELETE] Delete a note by ID without authentication token", {tag: ['@regress', '@ticket']}, async({API, authUser}) => {
     const note = generateNote({ min: 4, max: 15 }, { min: 4, max: 30 }, "Home");
     const createdNote = await createNote(API, authUser.token, note)
     
