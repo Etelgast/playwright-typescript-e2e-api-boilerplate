@@ -10,6 +10,4 @@
 - UI E2E tests
 - Allure reports
 
-## More information about this project
-
 ## Installing Dependencies
