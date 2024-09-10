@@ -1,0 +1,13 @@
+addReviewers: true
+numberOfReviewers: 1
+reviewers:
+ - etelgast
+
+addAssignees: true
+assignees:
+ - etelgast
+numberOfAssignees: 1
+
+skipKeywords:
+  - wip
+  - draft
